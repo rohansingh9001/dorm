@@ -2,7 +2,7 @@
  * The model registry.
  *
  * Django auto-registers models via a metaclass and lets you reference them by
- * string ("app.Model"). We have no metaclasses (design §4.2), so registration is
+ * string ("app.Model"). We have no metaclasses (design 4.2), so registration is
  * explicit (`Model.register()` / `defineModel()`), but the registry still backs
  * string relation refs and lets the (future) migration autoloader find every model.
  */

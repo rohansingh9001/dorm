@@ -196,7 +196,7 @@ alterModelTable alterModelOptions runSql runJs`), squashing with `replaces`
 semantics, `--fake`, targets, SQL preview, recorder table, historical-state
 schema generation.
 
-## Intentional deviations from Django (design §14)
+## Intentional deviations from Django (design 14)
 
 | Area | Django | dorm | Why |
 | --- | --- | --- | --- |

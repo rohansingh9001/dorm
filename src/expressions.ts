@@ -2,7 +2,7 @@
  * `Q` objects — composable WHERE conditions.
  *
  * Django composes Q objects with the `&`, `|`, `~` operators. JS has no operator
- * overloading (design §5.4), so we expose `.and()`, `.or()`, `.not()` methods with
+ * overloading (design 5.4), so we expose `.and()`, `.or()`, `.not()` methods with
  * identical semantics. `Q` is callable without `new`, matching the design's
  * `Q({ ... }).or(Q({ ... }))` style.
  *
@@ -50,7 +50,7 @@ export function Q(arg: QExpr | FilterObject): QExpr {
 }
 
 /* ----------------------------------------------------------------------------
- * F() expressions — reference a column inside a query (design §5.4).
+ * F() expressions — reference a column inside a query (design 5.4).
  *
  *   Book.objects.filter({ stock__lt: F("threshold") })   // column vs column
  *   Book.objects.update({ price: F("price").mul(1.1) })   // arithmetic in SQL
@@ -92,7 +92,7 @@ export function F(name: string): FExpression {
 }
 
 /* ----------------------------------------------------------------------------
- * Aggregate functions (design §5.5) — used in `aggregate()` and `annotate()`.
+ * Aggregate functions (design 5.5) — used in `aggregate()` and `annotate()`.
  *
  *   Author.objects.aggregate({ avgAge: Avg("age") })
  *   Author.objects.annotate({ numBooks: Count("books") })   // reverse relation
@@ -134,7 +134,7 @@ export function Max(source: string): AggregateExpr {
 }
 
 /* ----------------------------------------------------------------------------
- * Database functions (design §5.5) — usable in `annotate()`.
+ * Database functions (design 5.5) — usable in `annotate()`.
  *
  *   Author.objects.annotate({ lower: Lower("name") })
  *   Author.objects.annotate({ display: Coalesce("nickname", "name", Value("anon")) })
@@ -205,7 +205,7 @@ export function Cast(arg: FuncArg, castType: string): FuncExpr {
 }
 
 /* ----------------------------------------------------------------------------
- * Window functions (design §5.5).
+ * Window functions (design 5.5).
  *
  *   Book.objects.annotate({
  *     rank: Window(Rank(), { partitionBy: ["authorId"], orderBy: ["-price"] }),

@@ -1,7 +1,7 @@
 /**
  * Connection configuration and the connection registry.
  *
- * Mirrors Django's `DATABASES` setting (design §9): a map of named aliases, each
+ * Mirrors Django's `DATABASES` setting (design 9): a map of named aliases, each
  * describing one database. Models resolve their backend by alias ("default"
  * unless `Meta.using` says otherwise). Phase 1 ships the SQLite backend; the
  * Postgres/MySQL engines are recognized but throw until implemented.
@@ -25,14 +25,14 @@ export interface DatabaseConfig {
 
 export interface DormConfig {
   databases: Record<string, DatabaseConfig>;
-  /** Autoload globs for model registration (used by the CLI; design §9). */
+  /** Autoload globs for model registration (used by the CLI; design 9). */
   models?: string[];
   migrations?: { dir: string };
   /** Optional Django-style app grouping. */
   apps?: string[];
 }
 
-/** Identity helper that gives `dorm.config.ts` full type-checking (design §9). */
+/** Identity helper that gives `dorm.config.ts` full type-checking (design 9). */
 export function defineConfig(config: DormConfig): DormConfig {
   return config;
 }

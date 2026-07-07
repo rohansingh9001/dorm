@@ -4,7 +4,7 @@
  * A field is a declarative descriptor: it knows its DB type, how to convert
  * values to/from the database, and its options (null/unique/default/…). It does
  * NOT hold a value — instance values live on the instance (see `model.ts`). This
- * is the static-declaration / instance-value split called out in design §4.2.
+ * is the static-declaration / instance-value split called out in design 4.2.
  *
  * Mirrors `django.db.models.*Field`. Phase 1 implements scalar fields plus
  * `ForeignKey`/`OneToOneField`; `ManyToManyField` is a Phase 2 stub.
@@ -258,7 +258,7 @@ export class DecimalField extends Field {
     if (vendor === "mysql") return `DECIMAL(${this.maxDigits}, ${this.decimalPlaces})`;
     return "TEXT";
   }
-  // String-backed to avoid float drift (design §4.3).
+  // String-backed to avoid float drift (design 4.3).
   override toDb(value: unknown): SqlValue {
     if (value === null || value === undefined) return null;
     return String(value);
@@ -534,7 +534,7 @@ export interface ManyToManyOptions extends FieldOptions {
 }
 
 /**
- * ManyToManyField (design §6.2). No column lives on the model's table; rows live
+ * ManyToManyField (design 6.2). No column lives on the model's table; rows live
  * in an auto-generated through-table named `<table>_<field>` (e.g. `post_tags`)
  * with `<owner>Id` / `<target>Id` FK columns (`from<X>Id`/`to<X>Id` when
  * self-referential, like Django's `from_x_id`/`to_x_id`).
@@ -603,7 +603,7 @@ export class ManyToManyField extends Field {
 }
 
 /* ----------------------------------------------------------------------------
- * Public factory namespace — `fields.CharField({ ... })` (design §4.2/§4.3)
+ * Public factory namespace — `fields.CharField({ ... })` (design 4.2/4.3)
  * ------------------------------------------------------------------------- */
 
 export const fields = {

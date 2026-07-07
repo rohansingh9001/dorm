@@ -1,12 +1,12 @@
 /**
- * Lifecycle signals (design §7.1) — the analogue of `django.db.models.signals`.
+ * Lifecycle signals (design 7.1) — the analogue of `django.db.models.signals`.
  *
  *   import { signals } from "dorm";
  *   signals.postSave.connect(Author, ({ instance, created }) => { ... });
  *   signals.postSave.connect(receiver);            // all models
  *   signals.postSave.disconnect(receiver);
  *
- * Deviation (design §14): receivers may be sync or async; async receivers are
+ * Deviation (design 14): receivers may be sync or async; async receivers are
  * awaited in registration order before the triggering operation returns.
  */
 import type { ModelInstance } from "./types.ts";

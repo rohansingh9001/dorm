@@ -48,7 +48,7 @@ export async function loadMigrations(dir: string): Promise<LoadedMigration[]> {
 }
 
 /**
- * Resolve squashed migrations against the applied set (design §10.1).
+ * Resolve squashed migrations against the applied set (design 10.1).
  *
  * For each squash: if every replaced migration is applied, the squash counts as
  * applied and supersedes them (`impliedApplied`); if none are applied (fresh

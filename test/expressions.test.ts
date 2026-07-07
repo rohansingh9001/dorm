@@ -1,5 +1,5 @@
 /**
- * F() expressions, aggregate(), and annotate() — design §5.4/§5.5.
+ * F() expressions, aggregate(), and annotate() — design 5.4/5.5.
  */
 import { test, before, after, describe } from "node:test";
 import assert from "node:assert/strict";

@@ -5,7 +5,7 @@
  *
  * Django uses a metaclass to do this implicitly; JS has none, so registration is
  * explicit via `defineModel(...)` (preferred — best inference) or `Model.register()`
- * for the static-property class style (design §4.2/§4.4). Both build the same
+ * for the static-property class style (design 4.2/4.4). Both build the same
  * internal `ModelMeta`.
  *
  * The static field declaration is only a *descriptor*; instance values live as
@@ -74,7 +74,7 @@ function equalish(a: unknown, b: unknown): boolean {
   return false;
 }
 
-/** Apply `auto_now` / `auto_now_add` on save (design §7). */
+/** Apply `auto_now` / `auto_now_add` on save (design 7). */
 function applyAutoNow(f: Field, instance: ModelInstance, creating: boolean): void {
   if (f instanceof DateField || f instanceof DateTimeField) {
     if ((creating && (f.autoNowAdd || f.autoNow)) || (!creating && f.autoNow)) {
@@ -84,7 +84,7 @@ function applyAutoNow(f: Field, instance: ModelInstance, creating: boolean): voi
 }
 
 /* ----------------------------------------------------------------------------
- * Forward relation descriptor (FK / O2O): `await book.author.get()` (design §6.1).
+ * Forward relation descriptor (FK / O2O): `await book.author.get()` (design 6.1).
  * ------------------------------------------------------------------------- */
 
 class ForwardRelation {
@@ -143,7 +143,7 @@ function defineForwardRelation(proto: object, field: ForeignKey): void {
 }
 
 /* ----------------------------------------------------------------------------
- * Reverse relations: `author.books` (design §6.1). FK targets are lazy thunks, so
+ * Reverse relations: `author.books` (design 6.1). FK targets are lazy thunks, so
  * we (re)run resolution after every registration; try/catch skips not-yet-defined
  * targets, and the second of two mutually-referencing models wires up both sides.
  * ------------------------------------------------------------------------- */
@@ -383,7 +383,7 @@ export class Model {
     (this as Record<string, unknown>)[meta.pk.attname] = value;
   }
 
-  /** INSERT a new row or UPDATE changed fields (dirty tracking); design §7. */
+  /** INSERT a new row or UPDATE changed fields (dirty tracking); design 7. */
   async save(opts: { updateFields?: string[] } = {}): Promise<this> {
     const ctor = this.constructor as unknown as ModelClass;
     const meta = ctor.meta;
@@ -499,7 +499,7 @@ export class Model {
     return root;
   }
 
-  /** Batch-load reverse / M2M relations onto already-fetched instances (prefetch; design §6.3). */
+  /** Batch-load reverse / M2M relations onto already-fetched instances (prefetch; design 6.3). */
   static async _prefetchInto(ctor: ModelClass, instances: ModelInstance[], names: string[]): Promise<void> {
     const pks = instances.map((i) => i.pk).filter((v) => v !== null && v !== undefined);
     for (const name of names) {
@@ -547,7 +547,7 @@ export class Model {
   }
 
   /**
-   * Register a static-property model (design §4.2). Reads static `Field` props,
+   * Register a static-property model (design 4.2). Reads static `Field` props,
    * an optional static `meta`, and binds everything. Prefer `defineModel` when
    * you want strong instance typing.
    */
@@ -655,10 +655,10 @@ function buildModel(
 }
 
 /* ----------------------------------------------------------------------------
- * defineModel factory (design §4.4) — the preferred, best-typed entry point.
+ * defineModel factory (design 4.4) — the preferred, best-typed entry point.
  * ------------------------------------------------------------------------- */
 
-// Maps a field descriptor to the JS type of its instance value (design §11).
+// Maps a field descriptor to the JS type of its instance value (design 11).
 // Order matters: subclasses (EmailField<:CharField, BigAutoField<:AutoField) must
 // be matched by their base where they share a value type.
 type FieldValue<F extends Field> =
@@ -688,7 +688,7 @@ type FieldValue<F extends Field> =
                           ? unknown
                           : unknown;
 
-/** Awaitable forward-relation descriptor (`await book.author.get()`; design §6.1). */
+/** Awaitable forward-relation descriptor (`await book.author.get()`; design 6.1). */
 export interface ForwardRelationAccessor<R = ModelInstance> {
   get(): Promise<R | null>;
   readonly id: unknown;
@@ -729,7 +729,7 @@ export interface DefinedModel<I extends ModelInstance> {
 }
 
 /**
- * Define and register a model from a field map (design §4.4).
+ * Define and register a model from a field map (design 4.4).
  *
  *   const Author = defineModel("Author", {
  *     name: fields.CharField({ maxLength: 100 }),

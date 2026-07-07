@@ -1,5 +1,5 @@
 /**
- * The autodetector (design §10.3): diff two project states into operations.
+ * The autodetector (design 10.3): diff two project states into operations.
  *
  * Like Django: new/removed models, added/removed/altered fields, table and
  * ordering changes — with rename detection that asks before assuming. The

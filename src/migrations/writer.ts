@@ -1,7 +1,7 @@
 /**
  * Migration writer: serialize operations into a numbered migration file.
  *
- * Deviation from design §10.2's class-style sketch: files default-export a plain
+ * Deviation from design 10.2's class-style sketch: files default-export a plain
  * object whose `operations` is a factory receiving the `ops` namespace. That
  * keeps generated files import-free — they run from any directory layout
  * without resolving the "dorm" package — while staying plain readable code.
@@ -60,7 +60,7 @@ export function writeMigration(
 }
 
 /**
- * Write a squashed migration (design §10.1, `squashmigrations`): one numbered
+ * Write a squashed migration (design 10.1, `squashmigrations`): one numbered
  * 0001 file with `replaces` listing the whole history it stands in for. The
  * replaced files stay on disk during the transition and may be deleted once
  * every database has either fully applied them or starts fresh.

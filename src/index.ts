@@ -1,5 +1,5 @@
 /**
- * Public API — mirrors what you'd import from `django.db.models` (design §3).
+ * Public API — mirrors what you'd import from `django.db.models` (design 3).
  *
  *   import { Model, fields, defineModel, Q, connect } from "dorm";
  */

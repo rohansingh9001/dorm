@@ -1,5 +1,5 @@
 /**
- * Migration engine tests (design §10): autodetector, writer round-trip, executor
+ * Migration engine tests (design 10): autodetector, writer round-trip, executor
  * forward/backward, --fake, sqlmigrate SQL collection, alter/rename with data
  * preserved.
  */

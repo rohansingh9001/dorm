@@ -74,9 +74,9 @@ export interface QueryState {
   resultMode: ResultMode;
   /** Set to true by `none()` — short-circuits to an empty result without hitting the DB. */
   empty: boolean;
-  /** Forward FK/O2O relation paths to LEFT JOIN and hydrate (design §6.3). Each path is its segments. */
+  /** Forward FK/O2O relation paths to LEFT JOIN and hydrate (design 6.3). Each path is its segments. */
   selectRelated: string[][];
-  /** Reverse-FK / M2M accessor names to batch-load in a second query (design §6.3). */
+  /** Reverse-FK / M2M accessor names to batch-load in a second query (design 6.3). */
   prefetchRelated: string[];
   /** Per-row annotations (aggregates, DB functions, F, windows); keyed by output name. */
   annotations: Record<string, AnnotationExpr>;

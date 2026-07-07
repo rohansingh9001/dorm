@@ -21,7 +21,7 @@ This project (`dorm`) aims to reproduce that experience faithfully in Node.js. T
 ### Non-goals
 
 - We are **not** building a web framework, admin site, templating, or auth. Just the ORM + migrations + a shell.
-- We are **not** targeting 100% feature parity on day one — see the phased roadmap (§12). We target *API-shape* parity so code reads like Django.
+- We are **not** targeting 100% feature parity on day one — see the phased roadmap (12). We target *API-shape* parity so code reads like Django.
 
 ---
 
@@ -128,7 +128,7 @@ class Author extends Model {
 Author.register(); // binds manager, validates fields, adds to app registry
 ```
 
-**Deviation note:** Django uses a metaclass to auto-register models and inject the `objects` manager. JS lacks metaclasses, so we require an explicit `Model.register()` (or a `defineModel()` factory — see §4.4) call. The CLI's `makemigrations` autoloads every file under the configured `models/` dir, so registration always runs.
+**Deviation note:** Django uses a metaclass to auto-register models and inject the `objects` manager. JS lacks metaclasses, so we require an explicit `Model.register()` (or a `defineModel()` factory — see 4.4) call. The CLI's `makemigrations` autoloads every file under the configured `models/` dir, so registration always runs.
 
 Instance field access (`author.name`) returns values, exactly like Django. The static declaration is the *field descriptor*; the instance holds the *value*. The base class implements this split with per-instance data storage and getters/setters keyed off the registered field map.
 

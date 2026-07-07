@@ -1,5 +1,5 @@
 /**
- * Transactions (design §8) — the analogue of `django.db.transaction`.
+ * Transactions (design 8) — the analogue of `django.db.transaction`.
  *
  *   await transaction.atomic(async () => {
  *     await Author.objects.create({ ... });
@@ -7,7 +7,7 @@
  *     // throw -> full rollback; nested atomic() -> savepoints
  *   });
  *
- * Deviation (design §14): Django's `atomic` is a decorator + context manager;
+ * Deviation (design 14): Django's `atomic` is a decorator + context manager;
  * here it's a callback. `AsyncLocalStorage` carries the nesting depth, so nested
  * ORM calls join the active transaction automatically — no connection threading.
  *

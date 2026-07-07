@@ -167,7 +167,7 @@ export class Manager<T extends ModelInstance = ModelInstance> {
 }
 
 /**
- * The manager returned by a reverse relation accessor — `author.books` (design §6.1).
+ * The manager returned by a reverse relation accessor — `author.books` (design 6.1).
  * Every queryset it produces is pre-filtered to the owning instance, and `create`/
  * `add`/`set`/`remove`/`clear` maintain the foreign key for you.
  */
@@ -251,7 +251,7 @@ export interface M2MBinding {
 }
 
 /**
- * Manager returned by an M2M accessor — `post.tags` / `tag.posts` (design §6.2).
+ * Manager returned by an M2M accessor — `post.tags` / `tag.posts` (design 6.2).
  * Querysets are scoped through the through-table; `add`/`remove`/`set`/`clear`
  * mutate it and fire the `m2mChanged` signal.
  */

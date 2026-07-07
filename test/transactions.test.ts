@@ -1,5 +1,5 @@
 /**
- * Transactions (design §8) and lifecycle signals (design §7.1).
+ * Transactions (design 8) and lifecycle signals (design 7.1).
  */
 import { test, before, after, describe } from "node:test";
 import assert from "node:assert/strict";

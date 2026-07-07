@@ -1,5 +1,5 @@
 /**
- * The QuerySet: immutable, lazy, chainable (design §5).
+ * The QuerySet: immutable, lazy, chainable (design 5).
  *
  * Nothing touches the database until the queryset is *evaluated*. Chaining
  * methods (`filter`, `exclude`, `orderBy`, …) clone the AST and return a new
@@ -100,7 +100,7 @@ export class QuerySet<T = ModelInstance> implements PromiseLike<T[]>, AsyncItera
   }
 
   /**
-   * Request `SELECT ... FOR UPDATE` row locks (design §8). SQLite has no row
+   * Request `SELECT ... FOR UPDATE` row locks (design 8). SQLite has no row
    * locks (the whole database locks on write), so this is accepted and ignored
    * there; it matters for server backends.
    */
@@ -224,7 +224,7 @@ export class QuerySet<T = ModelInstance> implements PromiseLike<T[]>, AsyncItera
     });
   }
 
-  /* ----- set operations (design §5.3) ------------------------------------ */
+  /* ----- set operations (design 5.3) ------------------------------------ */
 
   /** SQL UNION (or UNION ALL) with another queryset over the same model. */
   union(other: QuerySet<T>, opts: { all?: boolean } = {}): CombinedQuerySet<T> {

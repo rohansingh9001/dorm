@@ -1,5 +1,5 @@
 /**
- * Migration project state (design §10.3).
+ * Migration project state (design 10.3).
  *
  * A `ProjectState` is the serialized shape of every model at a point in the
  * migration history. `makemigrations` replays all migration files into a state,

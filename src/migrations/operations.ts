@@ -1,5 +1,5 @@
 /**
- * Migration operations (design §10.2) — `createModel`, `addField`, `alterField`,
+ * Migration operations (design 10.2) — `createModel`, `addField`, `alterField`,
  * `runSql`, `runJs`, … Each operation knows how to:
  *   - mutate a ProjectState        (`stateForwards`)
  *   - emit DDL/DML for a backend   (`databaseForwards`)

@@ -1,6 +1,6 @@
 /**
  * Relation tests: JOIN-based relation spanning, selectRelated, reverse related
- * managers, and prefetchRelated — Phase 2 (design §6).
+ * managers, and prefetchRelated — Phase 2 (design 6).
  *
  * Model graph: Publisher 1—* Author 1—* Book.
  */

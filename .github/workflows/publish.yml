@@ -1,0 +1,33 @@
+# Publishes the package to npm when a GitHub Release is published.
+#
+# One-time setup required before this works:
+#   1. Create an npm automation token (npmjs.com -> Access Tokens -> Granular/Automation).
+#   2. Add it to this repo as a secret named NPM_TOKEN
+#      (Settings -> Secrets and variables -> Actions -> New repository secret).
+#
+# `prepublishOnly` (in package.json) runs clean + typecheck + test + build before
+# the publish, so the compiled dist/ is always fresh. `--provenance` attaches a
+# signed provenance statement (requires the id-token: write permission below).
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      - run: npm ci
+      - run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

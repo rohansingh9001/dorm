@@ -37,7 +37,7 @@ const Book = defineModel("Book", {
   author: fields.ForeignKey(() => Author, { onDelete: "CASCADE", relatedName: "books" }),
 });
 
-// Static-property class style + Model.register() (design §4.2).
+// Static-property class style + Model.register() (design 4.2).
 class Tag extends Model {
   static label = fields.CharField({ maxLength: 50 });
   static slug = fields.CharField({ maxLength: 50, unique: true });

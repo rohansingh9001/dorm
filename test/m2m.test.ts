@@ -1,5 +1,5 @@
 /**
- * ManyToManyField tests (design §6.2): auto through-table, add/remove/set/clear,
+ * ManyToManyField tests (design 6.2): auto through-table, add/remove/set/clear,
  * spanning filters in both directions, prefetch, annotate, and m2mChanged.
  */
 import { test, before, after, describe } from "node:test";

@@ -1,7 +1,7 @@
 /**
  * Backend contract.
  *
- * A backend is the dialect-specific seam (design §3): it executes parameterized
+ * A backend is the dialect-specific seam (design 3): it executes parameterized
  * SQL, exposes identifier quoting, and owns a `SchemaEditor` that turns model
  * metadata into DDL. The QuerySet/compiler never talk to a driver directly — they
  * go through this interface, so adding Postgres/MySQL is a matter of another impl.
@@ -26,7 +26,7 @@ export interface SchemaEditor {
   addColumn(meta: ModelMeta, field: Field): Promise<void>;
   /** ALTER TABLE DROP COLUMN, falling back to a table rebuild where unsupported. */
   removeColumn(meta: ModelMeta, field: Field): Promise<void>;
-  /** Change a column's definition — on SQLite this is the rebuild dance (design §10.4). */
+  /** Change a column's definition — on SQLite this is the rebuild dance (design 10.4). */
   alterColumn(newMeta: ModelMeta, oldField: Field, newField: Field): Promise<void>;
   renameColumn(table: string, oldColumn: string, newColumn: string): Promise<void>;
   renameTable(oldName: string, newName: string): Promise<void>;

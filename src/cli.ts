@@ -1,5 +1,5 @@
 /**
- * The `dorm` CLI — the `manage.py` analogue (design §10.1).
+ * The `dorm` CLI — the `manage.py` analogue (design 10.1).
  *
  *   dorm makemigrations [--name n] [--empty] [--dry-run] [--check]
  *   dorm migrate [target|zero] [--fake] [--plan]

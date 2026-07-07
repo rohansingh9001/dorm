@@ -2,7 +2,7 @@
  * SQLite backend, built on Node's built-in `node:sqlite` (no external driver).
  *
  * The driver is synchronous; we wrap it in the async `Backend` interface so the
- * public API is uniform (design open-question §3 → "async-only for parity"). A
+ * public API is uniform (design open-question 3 → "async-only for parity"). A
  * `regexp` function is registered so the `regex`/`iregex` lookups work, since
  * SQLite has no built-in REGEXP operator.
  */
@@ -132,7 +132,7 @@ class SqliteSchemaEditor implements SchemaEditor {
 
   async alterColumn(newMeta: ModelMeta, _oldField: Field, _newField: Field): Promise<void> {
     // SQLite cannot ALTER a column's type/constraints — rebuild the table with
-    // the new definitions and copy the data over (design §10.4).
+    // the new definitions and copy the data over (design 10.4).
     await this.rebuildTable(newMeta, {});
   }
 
