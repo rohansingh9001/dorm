@@ -38,5 +38,5 @@ Initial release. A Django-style ORM for Node.js, published as `dormjs`.
 - **CLI** — the `dorm` command (`makemigrations`, `migrate`, `showmigrations`,
   `squashmigrations`, `sqlmigrate`, `check`, `flush`, `shell`, `dbshell`, `inspectdb`).
 
-[Unreleased]: https://github.com/rohansingh9001/dorm/compare/v0.0.1...HEAD
-[0.0.1]: https://github.com/rohansingh9001/dorm/releases/tag/v0.0.1
+[Unreleased]: https://github.com/rohansingh9001/dormjs/compare/v0.0.1...HEAD
+[0.0.1]: https://github.com/rohansingh9001/dormjs/releases/tag/v0.0.1

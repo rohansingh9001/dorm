@@ -48,11 +48,11 @@
   "author": "Rohan Singh <rohansingh9001@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rohansingh9001/dorm.git"
+    "url": "git+https://github.com/rohansingh9001/dormjs.git"
   },
-  "homepage": "https://github.com/rohansingh9001/dorm#readme",
+  "homepage": "https://github.com/rohansingh9001/dormjs#readme",
   "bugs": {
-    "url": "https://github.com/rohansingh9001/dorm/issues"
+    "url": "https://github.com/rohansingh9001/dormjs/issues"
   },
   "peerDependencies": {
     "mysql2": ">=3",
