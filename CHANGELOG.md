@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.1] - 2026-07-08
 
-Initial release. A Django-style ORM for Node.js, published as `dormjs`.
+Initial release. A Django-style ORM for Node.js, published as `qorm`.
 
 ### Added
 

@@ -1,5 +1,5 @@
 {
-  "name": "dormjs",
+  "name": "qorm",
   "version": "0.0.1",
   "description": "A Django-style ORM for Node.js — declarative models, a lazy chainable QuerySet, and a manage-style CLI.",
   "type": "module",

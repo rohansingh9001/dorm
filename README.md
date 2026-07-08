@@ -1,4 +1,4 @@
-# dorm
+# qorm
 
 A Django-style ORM for Node.js — declarative models, a lazy chainable `QuerySet`,
 related managers, auto-generated migrations, and a `manage.py`-style CLI. See
@@ -13,7 +13,7 @@ backend uses the built-in `node:sqlite`).
 ## Installation
 
 ```bash
-npm install dormjs
+npm install qorm
 # Optional server drivers — only for the backend you use:
 npm install pg        # PostgreSQL
 npm install mysql2    # MySQL 8
@@ -43,7 +43,7 @@ npm test
 ## Quick start
 
 ```ts
-import { defineModel, fields, Q, F, Count, connect, getConnection } from "dormjs";
+import { defineModel, fields, Q, F, Count, connect, getConnection } from "qorm";
 
 const Author = defineModel(
   "Author",
@@ -132,7 +132,7 @@ dorm inspectdb                 # generate model code from an existing database
 Configuration lives in `dorm.config.ts` (or `.js`/`.mjs`):
 
 ```ts
-import { defineConfig } from "dormjs";
+import { defineConfig } from "qorm";
 
 export default defineConfig({
   databases: {
