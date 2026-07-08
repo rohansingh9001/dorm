@@ -38,7 +38,7 @@ export interface SchemaEditor {
   dropManyToMany(meta: ModelMeta, field: Field, opts?: { ifExists?: boolean }): Promise<void>;
   /**
    * Record the SQL the callback would execute instead of executing it
-   * (powers `dorm sqlmigrate`). Returns the collected statements.
+   * (powers `qorm sqlmigrate`). Returns the collected statements.
    */
   collect(fn: (editor: SchemaEditor) => Promise<void>): Promise<string[]>;
 }

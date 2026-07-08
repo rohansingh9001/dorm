@@ -309,7 +309,7 @@ export function runConformanceSuite(engineName: string, config: DatabaseConfig):
     });
 
     test("migration engine end-to-end on this backend", async () => {
-      const dir = mkdtempSync(join(tmpdir(), `dorm-${engineName}-mig-`));
+      const dir = mkdtempSync(join(tmpdir(), `qorm-${engineName}-mig-`));
       const backend = getConnection();
       try {
         // A standalone model evolved across three migrations.
@@ -364,7 +364,7 @@ export function runConformanceSuite(engineName: string, config: DatabaseConfig):
       } finally {
         rmSync(dir, { recursive: true, force: true });
         // Clean the recorder so other suites on this DB start fresh.
-        await backend.run(`DELETE FROM ${backend.quoteName("dorm_migrations")}`).catch(() => {});
+        await backend.run(`DELETE FROM ${backend.quoteName("qorm_migrations")}`).catch(() => {});
       }
     });
   });

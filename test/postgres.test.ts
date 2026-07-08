@@ -1,9 +1,9 @@
 /**
  * Postgres conformance — runs the shared suite against a real server
- * (docker: `docker run -d --name dorm-pg -e POSTGRES_USER=dorm -e POSTGRES_PASSWORD=dorm \
- *   -e POSTGRES_DB=dorm -p 5433:5432 postgres`). Skips cleanly when unreachable.
+ * (docker: `docker run -d --name qorm-pg -e POSTGRES_USER=qorm -e POSTGRES_PASSWORD=qorm \
+ *   -e POSTGRES_DB=qorm -p 5433:5432 postgres`). Skips cleanly when unreachable.
  *
- * Override via DORM_PG_HOST / DORM_PG_PORT / DORM_PG_USER / DORM_PG_PASSWORD / DORM_PG_DB.
+ * Override via QORM_PG_HOST / QORM_PG_PORT / QORM_PG_USER / QORM_PG_PASSWORD / QORM_PG_DB.
  */
 import { test } from "node:test";
 import { runConformanceSuite } from "./helpers/conformance.ts";
@@ -11,11 +11,11 @@ import { createBackend, type DatabaseConfig } from "../src/index.ts";
 
 const config: DatabaseConfig = {
   engine: "postgres",
-  name: process.env.DORM_PG_DB ?? "dorm",
-  user: process.env.DORM_PG_USER ?? "dorm",
-  password: process.env.DORM_PG_PASSWORD ?? "dorm",
-  host: process.env.DORM_PG_HOST ?? "127.0.0.1",
-  port: Number(process.env.DORM_PG_PORT ?? 5433),
+  name: process.env.QORM_PG_DB ?? "qorm",
+  user: process.env.QORM_PG_USER ?? "qorm",
+  password: process.env.QORM_PG_PASSWORD ?? "qorm",
+  host: process.env.QORM_PG_HOST ?? "127.0.0.1",
+  port: Number(process.env.QORM_PG_PORT ?? 5433),
 };
 
 async function available(): Promise<boolean> {

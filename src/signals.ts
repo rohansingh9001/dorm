@@ -1,7 +1,7 @@
 /**
  * Lifecycle signals (design 7.1) — the analogue of `django.db.models.signals`.
  *
- *   import { signals } from "dorm";
+ *   import { signals } from "qorm";
  *   signals.postSave.connect(Author, ({ instance, created }) => { ... });
  *   signals.postSave.connect(receiver);            // all models
  *   signals.postSave.disconnect(receiver);

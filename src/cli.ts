@@ -1,17 +1,17 @@
 /**
- * The `dorm` CLI — the `manage.py` analogue (design 10.1).
+ * The `qorm` CLI — the `manage.py` analogue (design 10.1).
  *
- *   dorm makemigrations [--name n] [--empty] [--dry-run] [--check]
- *   dorm migrate [target|zero] [--fake] [--plan]
- *   dorm showmigrations
- *   dorm sqlmigrate <name>
- *   dorm check
- *   dorm flush [--yes]
- *   dorm shell
- *   dorm dbshell
- *   dorm inspectdb
+ *   qorm makemigrations [--name n] [--empty] [--dry-run] [--check]
+ *   qorm migrate [target|zero] [--fake] [--plan]
+ *   qorm showmigrations
+ *   qorm sqlmigrate <name>
+ *   qorm check
+ *   qorm flush [--yes]
+ *   qorm shell
+ *   qorm dbshell
+ *   qorm inspectdb
  *
- * Config is discovered as dorm.config.{ts,js,mjs} in the working directory
+ * Config is discovered as qorm.config.{ts,js,mjs} in the working directory
  * (or via --config <path>). `models` globs are imported so model modules
  * register themselves; `migrations.dir` locates the migration files.
  */
@@ -22,7 +22,7 @@ import { createInterface } from "node:readline";
 import { spawnSync } from "node:child_process";
 import repl from "node:repl";
 
-import { configure, closeAll, type DormConfig } from "./connection.ts";
+import { configure, closeAll, type QormConfig } from "./connection.ts";
 import { getConnection } from "./connection.ts";
 import { allModels } from "./registry.ts";
 import { ProjectState, StateApps } from "./migrations/state.ts";
@@ -73,7 +73,7 @@ function parseArgs(argv: string[]): Args {
  * Config + model loading
  * ------------------------------------------------------------------------- */
 
-const CONFIG_NAMES = ["dorm.config.ts", "dorm.config.js", "dorm.config.mjs"];
+const CONFIG_NAMES = ["qorm.config.ts", "qorm.config.js", "qorm.config.mjs"];
 
 function findConfigPath(flag: string | undefined): string {
   if (flag) {
@@ -88,9 +88,9 @@ function findConfigPath(flag: string | undefined): string {
   fail(`No ${CONFIG_NAMES.join(" / ")} found in ${process.cwd()} (or pass --config <path>).`);
 }
 
-async function loadConfig(flag: string | undefined): Promise<{ config: DormConfig; dir: string }> {
+async function loadConfig(flag: string | undefined): Promise<{ config: QormConfig; dir: string }> {
   const path = findConfigPath(flag);
-  const mod = (await import(pathToFileURL(path).href)) as { default?: DormConfig };
+  const mod = (await import(pathToFileURL(path).href)) as { default?: QormConfig };
   if (!mod.default || typeof mod.default !== "object" || !("databases" in mod.default)) {
     fail(`${path} must default-export a defineConfig({ databases, ... }) object.`);
   }
@@ -135,14 +135,14 @@ function expandGlob(pattern: string, baseDir: string): string[] {
   return out.sort();
 }
 
-async function loadModels(config: DormConfig, configDir: string): Promise<void> {
+async function loadModels(config: QormConfig, configDir: string): Promise<void> {
   for (const pattern of config.models ?? []) {
     const files = expandGlob(pattern, configDir);
     for (const file of files) await import(pathToFileURL(file).href);
   }
 }
 
-function migrationsDir(config: DormConfig, configDir: string): string {
+function migrationsDir(config: QormConfig, configDir: string): string {
   const dir = config.migrations?.dir ?? "./migrations";
   return isAbsolute(dir) ? dir : resolve(configDir, dir);
 }
@@ -172,7 +172,7 @@ function ttyAsker(): Asker {
  * Commands
  * ------------------------------------------------------------------------- */
 
-async function cmdMakemigrations(args: Args, config: DormConfig, configDir: string): Promise<void> {
+async function cmdMakemigrations(args: Args, config: QormConfig, configDir: string): Promise<void> {
   const dir = migrationsDir(config, configDir);
   const loaded = await loadMigrations(dir);
   // Replay through squashes (either branch yields the same state; prefer the squash).
@@ -213,7 +213,7 @@ async function cmdMakemigrations(args: Args, config: DormConfig, configDir: stri
   void name;
 }
 
-async function cmdMigrate(args: Args, config: DormConfig, configDir: string): Promise<void> {
+async function cmdMigrate(args: Args, config: QormConfig, configDir: string): Promise<void> {
   const backend = getConnection();
   const dir = migrationsDir(config, configDir);
   const migrations = await loadMigrations(dir);
@@ -240,7 +240,7 @@ async function cmdMigrate(args: Args, config: DormConfig, configDir: string): Pr
   for (const name of result.applied) console.log(`  Applying ${name}...${fake ? " FAKED" : " OK"}`);
 }
 
-async function cmdShowmigrations(config: DormConfig, configDir: string): Promise<void> {
+async function cmdShowmigrations(config: QormConfig, configDir: string): Promise<void> {
   const backend = getConnection();
   const dir = migrationsDir(config, configDir);
   const all = await loadMigrations(dir);
@@ -255,7 +255,7 @@ async function cmdShowmigrations(config: DormConfig, configDir: string): Promise
   }
 }
 
-async function cmdSquashmigrations(config: DormConfig, configDir: string): Promise<void> {
+async function cmdSquashmigrations(config: QormConfig, configDir: string): Promise<void> {
   const dir = migrationsDir(config, configDir);
   const all = await loadMigrations(dir);
   const normals = all.filter((m) => m.replaces.length === 0);
@@ -280,9 +280,9 @@ async function cmdSquashmigrations(config: DormConfig, configDir: string): Promi
   );
 }
 
-async function cmdSqlmigrate(args: Args, config: DormConfig, configDir: string): Promise<void> {
+async function cmdSqlmigrate(args: Args, config: QormConfig, configDir: string): Promise<void> {
   const name = args.positional[0];
-  if (!name) fail("Usage: dorm sqlmigrate <migration-name-or-prefix>");
+  if (!name) fail("Usage: qorm sqlmigrate <migration-name-or-prefix>");
   const backend = getConnection();
   const migrations = await loadMigrations(migrationsDir(config, configDir));
   const executor = new MigrationExecutor(backend, migrations);
@@ -292,7 +292,7 @@ async function cmdSqlmigrate(args: Args, config: DormConfig, configDir: string):
   console.log("COMMIT;");
 }
 
-async function cmdCheck(config: DormConfig, configDir: string): Promise<void> {
+async function cmdCheck(config: QormConfig, configDir: string): Promise<void> {
   const models = allModels();
   for (const model of models) {
     for (const f of model.meta.fieldList) {
@@ -345,9 +345,9 @@ async function cmdFlush(args: Args): Promise<void> {
 
 async function cmdShell(): Promise<void> {
   const models = allModels();
-  console.log(`dorm shell — models: ${models.map((m) => m.modelName).join(", ") || "(none)"}`);
+  console.log(`qorm shell — models: ${models.map((m) => m.modelName).join(", ") || "(none)"}`);
   console.log(`Also available: Q, F, Count, Sum, Avg, Min, Max, transaction, db`);
-  const server = repl.start({ prompt: "dorm> " });
+  const server = repl.start({ prompt: "qorm> " });
   for (const model of models) server.context[model.modelName] = model;
   Object.assign(server.context, {
     Q,
@@ -362,7 +362,7 @@ async function cmdShell(): Promise<void> {
   });
 }
 
-function cmdDbshell(config: DormConfig): void {
+function cmdDbshell(config: QormConfig): void {
   const db = config.databases.default;
   if (!db) fail("No default database configured.");
   let cmd: string;
@@ -416,8 +416,8 @@ async function cmdInspectdb(): Promise<void> {
     `SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' AND name != ?`,
     [MIGRATIONS_TABLE],
   );
-  console.log(`// Auto-generated by \`dorm inspectdb\` — inspect and edit before use.`);
-  console.log(`import { defineModel, fields } from "dorm";\n`);
+  console.log(`// Auto-generated by \`qorm inspectdb\` — inspect and edit before use.`);
+  console.log(`import { defineModel, fields } from "qorm";\n`);
   for (const { name } of tables as Array<{ name: string }>) {
     const cols = backend.pragmaTableInfo(name);
     const fks = await backend.execute(`PRAGMA foreign_key_list(${backend.quoteName(name)})`);
@@ -449,18 +449,18 @@ async function cmdInspectdb(): Promise<void> {
 }
 
 function printHelp(): void {
-  console.log(`dorm — a Django-style ORM for Node.js
+  console.log(`qorm — a Django-style ORM for Node.js
 
-Usage: dorm <command> [options]
+Usage: qorm <command> [options]
 
 Commands:
   makemigrations   Diff models vs. migration state and write a migration file
                    (--name <slug>, --empty, --dry-run, --check)
   migrate          Apply (or unapply, given a target) migrations
-                   (dorm migrate [target|zero] [--fake] [--plan])
+                   (qorm migrate [target|zero] [--fake] [--plan])
   showmigrations   List migrations and their applied state
   squashmigrations Collapse the migration history into one squashed migration
-  sqlmigrate       Print the SQL for one migration (dorm sqlmigrate <name>)
+  sqlmigrate       Print the SQL for one migration (qorm sqlmigrate <name>)
   check            Validate models and configuration
   flush            Delete all rows from all model tables (--yes)
   shell            REPL with models preloaded
@@ -468,7 +468,7 @@ Commands:
   inspectdb        Generate model code from an existing database
 
 Options:
-  --config <path>  Path to dorm.config.{ts,js,mjs} (default: search cwd)
+  --config <path>  Path to qorm.config.{ts,js,mjs} (default: search cwd)
 `);
 }
 
@@ -524,7 +524,7 @@ export async function main(argv: string[] = process.argv.slice(2)): Promise<void
   }
 }
 
-// Run when invoked directly (bin/dorm.js imports and calls main()).
+// Run when invoked directly (bin/qorm.js imports and calls main()).
 const invokedDirectly =
   process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href;
 if (invokedDirectly) {

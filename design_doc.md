@@ -1,4 +1,4 @@
-# Design Doc: dorm — A Django-Style ORM for Node.js
+# Design Doc: qorm — A Django-Style ORM for Node.js
 
 > **Status:** Draft
 > **Target runtime:** Node.js 20+ (LTS), TypeScript-first, usable from plain JS
@@ -16,7 +16,7 @@ Node.js has many ORMs (Prisma, Sequelize, TypeORM, Objection), but none replicat
 - **Auto-generated migrations** — schema changes are diffed from models, not hand-written.
 - **A single integrated CLI** (`manage.py`) for migrate / makemigrations / shell / dbshell.
 
-This project (`dorm`) aims to reproduce that experience faithfully in Node.js. The mental model, method names, lookup syntax, and migration workflow should feel identical to a Django developer. Where JavaScript language constraints differ from Python, we document the deviation explicitly rather than inventing a new paradigm.
+This project (`qorm`) aims to reproduce that experience faithfully in Node.js. The mental model, method names, lookup syntax, and migration workflow should feel identical to a Django developer. Where JavaScript language constraints differ from Python, we document the deviation explicitly rather than inventing a new paradigm.
 
 ### Non-goals
 
@@ -40,7 +40,7 @@ This project (`dorm`) aims to reproduce that experience faithfully in Node.js. T
 ```
 +-------------------------------------------------------------+
 |                          User Code                          |
-|   models/*.ts   migrations/*.ts   dorm.config.ts         |
+|   models/*.ts   migrations/*.ts   qorm.config.ts         |
 +-----------------------------+-------------------------------+
                               |
             +-----------------v-----------------+
@@ -52,7 +52,7 @@ This project (`dorm`) aims to reproduce that experience faithfully in Node.js. T
    |           |              |              |             |
 +--v---+  +----v----+   +-----v-----+  +-----v-----+  +----v-----+
 |Model |  |QuerySet |   |  Manager  |  | Migration |  |   CLI    |
-|Meta  |  | (lazy)  |   |  / Related|  |  Engine   |  | (dorm)|
+|Meta  |  | (lazy)  |   |  / Related|  |  Engine   |  | (qorm)|
 +--+---+  +----+----+   +-----+-----+  +-----+-----+  +----+-----+
    |           |              |              |             |
    +-----------+------+-------+--------------+-------------+
@@ -103,12 +103,12 @@ class Author(models.Model):
         return self.name
 ```
 
-### 4.2 dorm equivalent
+### 4.2 qorm equivalent
 
 JavaScript has no metaclasses, so model fields are declared as **static class properties** and the base `Model` class wires them up at definition time (via a registration call). We use a decorator-free, explicit style so it works in plain JS and TS alike.
 
 ```typescript
-import { Model, fields, Meta } from "dorm";
+import { Model, fields, Meta } from "qorm";
 
 class Author extends Model {
   static name = fields.CharField({ maxLength: 100 });
@@ -134,7 +134,7 @@ Instance field access (`author.name`) returns values, exactly like Django. The s
 
 ### 4.3 Field types (parity table)
 
-| Django                       | dorm                                                  | Notes                                   |
+| Django                       | qorm                                                  | Notes                                   |
 | ---------------------------- | ----------------------------------------------------- | --------------------------------------- |
 | `AutoField` / `BigAutoField` | `AutoField` / `BigAutoField`                          | implicit `id` PK by default             |
 | `CharField`                  | `CharField({ maxLength })`                            | `maxLength` required                    |
@@ -187,7 +187,7 @@ The heart of the parity effort. A `QuerySet` is **immutable**, **lazy**, and **c
 
 A queryset does nothing until it is _evaluated_. In Django evaluation triggers are: iteration, `len()`, slicing with a step, `list()`, `bool()`, pickling, `repr()`. In JS we map these to:
 
-| Django trigger     | dorm trigger                                      |
+| Django trigger     | qorm trigger                                      |
 | ------------------ | ------------------------------------------------- |
 | `for x in qs`      | `for await (const x of qs)` (async iterator)      |
 | `list(qs)`         | `await qs` (thenable) or `await qs.all()`         |
@@ -247,7 +247,7 @@ const { avgAge } = await Author.objects.aggregate({ avgAge: Avg("age") });
 ### 5.4 `Q` objects and `F` expressions
 
 ```typescript
-import { Q, F } from "dorm";
+import { Q, F } from "qorm";
 
 Author.objects.filter(Q({ name__startswith: "A" }).or(Q({ name__startswith: "B" })));
 Author.objects.filter(Q({ active: true }).and(Q({ age__gte: 18 }).not()));
@@ -335,7 +335,7 @@ await a.refreshFromDb();
 Django ships `pre_save`, `post_save`, `pre_delete`, `post_delete`, `m2m_changed`, etc. We replicate a `signals` module:
 
 ```typescript
-import { signals } from "dorm";
+import { signals } from "qorm";
 
 signals.postSave.connect(Author, ({ instance, created }) => {
   if (created) console.log("new author", instance.id);
@@ -349,7 +349,7 @@ signals.postSave.connect(Author, ({ instance, created }) => {
 ## 8. Transactions
 
 ```typescript
-import { transaction } from "dorm";
+import { transaction } from "qorm";
 
 await transaction.atomic(async () => {
   const a = await Author.objects.create({ name: "X", email: "x@y.com" });
@@ -371,8 +371,8 @@ await transaction.atomic(async () => {
 A single config file, analogous to Django's `DATABASES` setting, with no other Django settings required.
 
 ```typescript
-// dorm.config.ts
-import { defineConfig } from "dorm";
+// qorm.config.ts
+import { defineConfig } from "qorm";
 
 export default defineConfig({
   databases: {
@@ -399,25 +399,25 @@ export default defineConfig({
 
 ## 10. Migrations & the CLI
 
-The `manage.py` analogue is a binary, `dorm`, installed by the package. It auto-discovers `dorm.config.ts`.
+The `manage.py` analogue is a binary, `qorm`, installed by the package. It auto-discovers `qorm.config.ts`.
 
 ### 10.1 Command parity
 
-| Django                   | dorm                           | Purpose                                              |
+| Django                   | qorm                           | Purpose                                              |
 | ------------------------ | ------------------------------ | ---------------------------------------------------- |
-| `makemigrations`         | `dorm makemigrations`          | diff models vs. migration state → new migration file |
-| `migrate`                | `dorm migrate`                 | apply unapplied migrations                           |
-| `migrate app 0003`       | `dorm migrate <app> <name>`    | migrate to a target (forward/back)                   |
-| `sqlmigrate`             | `dorm sqlmigrate <app> <name>` | print SQL for a migration                            |
-| `showmigrations`         | `dorm showmigrations`          | list migrations & applied state                      |
-| `makemigrations --empty` | `dorm makemigrations --empty`  | hand-written migration scaffold                      |
-| `migrate --fake`         | `dorm migrate --fake`          | mark applied without running                         |
-| `squashmigrations`       | `dorm squashmigrations`        | collapse a range                                     |
-| `dbshell`                | `dorm dbshell`                 | open the DB CLI                                      |
-| `shell`                  | `dorm shell`                   | REPL with models preloaded                           |
-| `inspectdb`              | `dorm inspectdb`               | generate models from existing schema                 |
-| `flush`                  | `dorm flush`                   | empty all tables                                     |
-| `check`                  | `dorm check`                   | validate models & config                             |
+| `makemigrations`         | `qorm makemigrations`          | diff models vs. migration state → new migration file |
+| `migrate`                | `qorm migrate`                 | apply unapplied migrations                           |
+| `migrate app 0003`       | `qorm migrate <app> <name>`    | migrate to a target (forward/back)                   |
+| `sqlmigrate`             | `qorm sqlmigrate <app> <name>` | print SQL for a migration                            |
+| `showmigrations`         | `qorm showmigrations`          | list migrations & applied state                      |
+| `makemigrations --empty` | `qorm makemigrations --empty`  | hand-written migration scaffold                      |
+| `migrate --fake`         | `qorm migrate --fake`          | mark applied without running                         |
+| `squashmigrations`       | `qorm squashmigrations`        | collapse a range                                     |
+| `dbshell`                | `qorm dbshell`                 | open the DB CLI                                      |
+| `shell`                  | `qorm shell`                   | REPL with models preloaded                           |
+| `inspectdb`              | `qorm inspectdb`               | generate models from existing schema                 |
+| `flush`                  | `qorm flush`                   | empty all tables                                     |
+| `check`                  | `qorm check`                   | validate models & config                             |
 
 ### 10.2 Migration files
 
@@ -425,7 +425,7 @@ Generated migrations are code (not raw SQL), mirroring Django's operation object
 
 ```typescript
 // migrations/0001_initial.ts
-import { Migration, ops } from "dorm";
+import { Migration, ops } from "qorm";
 
 export default class extends Migration {
   static dependencies = [];
@@ -457,7 +457,7 @@ export default class extends Migration {
 
 `makemigrations` works exactly like Django: it builds a **project state** by replaying all existing migrations, builds a **current state** from the model definitions, diffs them, and emits operations. It detects renames interactively ("Did you rename `Author.fullName` to `Author.name`? [y/N]"), handles dependency ordering across apps, and writes a numbered file with a dependency link to the previous migration.
 
-State is tracked in a `dorm_migrations` table (Django uses `django_migrations`) recording `(app, name, applied_at)`.
+State is tracked in a `qorm_migrations` table (Django uses `django_migrations`) recording `(app, name, applied_at)`.
 
 **Deviation note:** Django migrations are Python and can call arbitrary Python in `RunPython`. Ours are TS/JS modules; `runJs(forwardFn, backwardFn)` receives a schema-editor + ORM handle for data migrations. Reversibility rules match Django (irreversible if no backward function).
 
@@ -508,7 +508,7 @@ M2M, related managers, `selectRelated`/`prefetchRelated`, the migration engine +
 
 ## 14. Summary of Intentional Deviations
 
-| Area                     | Django                  | dorm                                      | Reason                       |
+| Area                     | Django                  | qorm                                      | Reason                       |
 | ------------------------ | ----------------------- | ----------------------------------------- | ---------------------------- |
 | Model registration       | Metaclass auto-register | `Model.register()` / `defineModel()`      | No metaclasses in JS         |
 | Materializing a queryset | Sync (`list(qs)`)       | Async (`await qs`)                        | No blocking I/O              |

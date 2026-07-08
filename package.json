@@ -13,7 +13,7 @@
     }
   },
   "bin": {
-    "dorm": "./bin/dorm.js"
+    "qorm": "./bin/qorm.js"
   },
   "files": [
     "dist",
@@ -48,11 +48,11 @@
   "author": "Rohan Singh <rohansingh9001@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rohansingh9001/dormjs.git"
+    "url": "git+https://github.com/rohansingh9001/qorm.git"
   },
-  "homepage": "https://github.com/rohansingh9001/dormjs#readme",
+  "homepage": "https://github.com/rohansingh9001/qorm#readme",
   "bugs": {
-    "url": "https://github.com/rohansingh9001/dormjs/issues"
+    "url": "https://github.com/rohansingh9001/qorm/issues"
   },
   "peerDependencies": {
     "mysql2": ">=3",

@@ -35,8 +35,8 @@ Initial release. A Django-style ORM for Node.js, published as `qorm`.
   operations, squashing, `--fake`, targets, SQL preview, and a recorder table.
 - **Backends** — SQLite (built-in `node:sqlite`, zero-dependency), PostgreSQL (`pg`),
   and MySQL 8 (`mysql2`); the server drivers are optional peer dependencies.
-- **CLI** — the `dorm` command (`makemigrations`, `migrate`, `showmigrations`,
+- **CLI** — the `qorm` command (`makemigrations`, `migrate`, `showmigrations`,
   `squashmigrations`, `sqlmigrate`, `check`, `flush`, `shell`, `dbshell`, `inspectdb`).
 
-[Unreleased]: https://github.com/rohansingh9001/dormjs/compare/v0.0.1...HEAD
-[0.0.1]: https://github.com/rohansingh9001/dormjs/releases/tag/v0.0.1
+[Unreleased]: https://github.com/rohansingh9001/qorm/compare/v0.0.1...HEAD
+[0.0.1]: https://github.com/rohansingh9001/qorm/releases/tag/v0.0.1

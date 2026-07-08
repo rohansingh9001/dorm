@@ -1,7 +1,7 @@
 /**
  * Public API — mirrors what you'd import from `django.db.models` (design 3).
  *
- *   import { Model, fields, defineModel, Q, connect } from "dorm";
+ *   import { Model, fields, defineModel, Q, connect } from "qorm";
  */
 
 // Models & fields
@@ -50,7 +50,7 @@ export { transaction, atomic } from "./transaction.ts";
 export { signals, Signal } from "./signals.ts";
 export type { SavePayload, DeletePayload, M2MChangedPayload } from "./signals.ts";
 
-// Migrations (programmatic API; the `dorm` CLI is the usual entry point)
+// Migrations (programmatic API; the `qorm` CLI is the usual entry point)
 export { ops } from "./migrations/operations.ts";
 export type { Operation, Ops } from "./migrations/operations.ts";
 export { ProjectState, StateApps } from "./migrations/state.ts";
@@ -74,7 +74,7 @@ export {
   getConnection,
   closeAll,
 } from "./connection.ts";
-export type { DormConfig, DatabaseConfig, Engine } from "./connection.ts";
+export type { QormConfig, DatabaseConfig, Engine } from "./connection.ts";
 
 // Backends (for advanced use / custom wiring)
 export { SqliteBackend } from "./backends/sqlite.ts";
@@ -82,7 +82,7 @@ export type { Backend, SchemaEditor, RunResult } from "./backends/base.ts";
 
 // Errors (per-model subclasses of DoesNotExist/MultipleObjectsReturned are minted at registration)
 export {
-  DormError,
+  QormError,
   DoesNotExist,
   MultipleObjectsReturned,
   FieldError,

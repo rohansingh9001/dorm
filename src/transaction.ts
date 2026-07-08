@@ -51,7 +51,7 @@ export async function atomicOn<T>(backend: Backend, fn: () => Promise<T> | T): P
   }
 
   // Nested: savepoint instead of BEGIN, so an inner failure rolls back only itself.
-  const sp = `dorm_sp_${depth}`;
+  const sp = `qorm_sp_${depth}`;
   await backend.savepoint(sp);
   const next = new Map(store);
   next.set(backend, depth + 1);

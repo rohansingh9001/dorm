@@ -43,7 +43,7 @@ const Book = defineModel("Book", {
 let dir: string;
 
 before(async () => {
-  dir = mkdtempSync(join(tmpdir(), "dorm-migrations-"));
+  dir = mkdtempSync(join(tmpdir(), "qorm-migrations-"));
   await connect({ engine: "sqlite", name: ":memory:" });
 });
 
@@ -100,7 +100,7 @@ describe("autodetector + writer + executor", () => {
     const result = await executor.migrate();
     assert.deepEqual(result.applied, ["0001_initial"]);
 
-    assert.deepEqual(await tableNames(), ["authors", "book", "dorm_migrations"]);
+    assert.deepEqual(await tableNames(), ["authors", "book", "qorm_migrations"]);
     assert.deepEqual(await new MigrationRecorder(backend).applied(), ["0001_initial"]);
 
     // Re-running is a no-op.
@@ -230,7 +230,7 @@ describe("autodetector + writer + executor", () => {
     const backend = getConnection();
     const executor = new MigrationExecutor(backend, await loadMigrations(dir));
     await executor.migrate({ target: "zero" });
-    assert.deepEqual(await tableNames(), ["dorm_migrations"]);
+    assert.deepEqual(await tableNames(), ["qorm_migrations"]);
     assert.deepEqual(await new MigrationRecorder(backend).applied(), []);
 
     // And forward all the way back up.

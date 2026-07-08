@@ -24,7 +24,7 @@ export interface DatabaseConfig {
   options?: Record<string, unknown>;
 }
 
-export interface DormConfig {
+export interface QormConfig {
   databases: Record<string, DatabaseConfig>;
   /** Autoload globs for model registration (used by the CLI; design 9). */
   models?: string[];
@@ -33,8 +33,8 @@ export interface DormConfig {
   apps?: string[];
 }
 
-/** Identity helper that gives `dorm.config.ts` full type-checking (design 9). */
-export function defineConfig(config: DormConfig): DormConfig {
+/** Identity helper that gives `qorm.config.ts` full type-checking (design 9). */
+export function defineConfig(config: QormConfig): QormConfig {
   return config;
 }
 
@@ -113,7 +113,7 @@ async function importBackend(
 }
 
 /** Build every connection in a config and return the default backend. */
-export async function configure(config: DormConfig): Promise<Backend> {
+export async function configure(config: QormConfig): Promise<Backend> {
   for (const [alias, cfg] of Object.entries(config.databases)) {
     setConnection(alias, await createBackend(cfg));
   }

@@ -11,7 +11,7 @@ import { pathToFileURL } from "node:url";
 import { ProjectState } from "./state.ts";
 import { ops as opsNamespace, type Operation, type Ops } from "./operations.ts";
 import { listMigrationFiles } from "./writer.ts";
-import { DormError } from "../errors.ts";
+import { QormError } from "../errors.ts";
 
 export interface LoadedMigration {
   name: string;
@@ -36,12 +36,12 @@ export async function loadMigrations(dir: string): Promise<LoadedMigration[]> {
     const mod = (await import(pathToFileURL(file).href)) as { default?: MigrationModuleShape };
     const def = mod.default;
     if (!def || typeof def !== "object" || !("operations" in def)) {
-      throw new DormError(`Migration ${file} must default-export { dependencies, operations }.`);
+      throw new QormError(`Migration ${file} must default-export { dependencies, operations }.`);
     }
     const operations =
       typeof def.operations === "function" ? def.operations(opsNamespace) : def.operations;
     if (!Array.isArray(operations)) {
-      throw new DormError(
+      throw new QormError(
         `Migration ${name}: operations must be (ops) => Operation[] or an array.`,
       );
     }

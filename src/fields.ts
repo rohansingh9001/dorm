@@ -51,7 +51,7 @@ function lcFirst(s: string): string {
 }
 
 /** Marker so we never confuse a Field with a plain options object during registration. */
-const FIELD_BRAND = Symbol.for("dorm.Field");
+const FIELD_BRAND = Symbol.for("qorm.Field");
 
 export abstract class Field {
   readonly [FIELD_BRAND] = true;

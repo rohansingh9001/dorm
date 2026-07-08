@@ -35,7 +35,7 @@ function runExpectFail(args: string[]): string {
     assert.notEqual(err.status, 0);
     return `${err.stdout ?? ""}${err.stderr ?? ""}`;
   }
-  assert.fail(`Expected \`dorm ${args.join(" ")}\` to exit nonzero.`);
+  assert.fail(`Expected \`qorm ${args.join(" ")}\` to exit nonzero.`);
 }
 
 function writeModels(withBio: boolean): void {
@@ -70,11 +70,11 @@ function tables(): string[] {
 }
 
 before(() => {
-  projectDir = mkdtempSync(join(tmpdir(), "dorm-cli-"));
+  projectDir = mkdtempSync(join(tmpdir(), "qorm-cli-"));
   dbPath = join(projectDir, "app.sqlite");
   mkdirSync(join(projectDir, "models"));
   writeFileSync(
-    join(projectDir, "dorm.config.mjs"),
+    join(projectDir, "qorm.config.mjs"),
     `export default {
   databases: { default: { engine: "sqlite", name: ${JSON.stringify(dbPath)} } },
   models: ["models/**/*.mjs"],
@@ -89,7 +89,7 @@ after(() => {
   rmSync(projectDir, { recursive: true, force: true });
 });
 
-describe("dorm CLI", () => {
+describe("qorm CLI", () => {
   test("makemigrations writes 0001_initial", () => {
     const out = run(["makemigrations"]);
     assert.match(out, /0001_initial/);
@@ -105,7 +105,7 @@ describe("dorm CLI", () => {
   test("migrate applies and creates tables", () => {
     const out = run(["migrate"]);
     assert.match(out, /Applying 0001_initial... OK/);
-    assert.deepEqual(tables(), ["authors", "book", "dorm_migrations"]);
+    assert.deepEqual(tables(), ["authors", "book", "qorm_migrations"]);
   });
 
   test("showmigrations marks applied", () => {
@@ -139,10 +139,10 @@ describe("dorm CLI", () => {
     const out = run(["migrate", "zero"]);
     assert.match(out, /Unapplying 0002_author_bio... OK/);
     assert.match(out, /Unapplying 0001_initial... OK/);
-    assert.deepEqual(tables(), ["dorm_migrations"]);
+    assert.deepEqual(tables(), ["qorm_migrations"]);
 
     run(["migrate"]);
-    assert.deepEqual(tables(), ["authors", "book", "dorm_migrations"]);
+    assert.deepEqual(tables(), ["authors", "book", "qorm_migrations"]);
   });
 
   test("check passes", () => {
@@ -182,7 +182,7 @@ describe("dorm CLI", () => {
     // Fresh database: only the squash is applied.
     const fresh = join(projectDir, "fresh.sqlite");
     writeFileSync(
-      join(projectDir, "dorm.fresh.mjs"),
+      join(projectDir, "qorm.fresh.mjs"),
       `export default {
   databases: { default: { engine: "sqlite", name: ${JSON.stringify(fresh)} } },
   models: ["models/**/*.mjs"],
@@ -190,7 +190,7 @@ describe("dorm CLI", () => {
 };
 `,
     );
-    const out2 = run(["migrate", "--config", "dorm.fresh.mjs"]);
+    const out2 = run(["migrate", "--config", "qorm.fresh.mjs"]);
     assert.match(out2, /Applying 0001_squashed_0002_author_bio... OK/);
     assert.doesNotMatch(out2, /Applying 0001_initial/);
     const db = new DatabaseSync(fresh);
@@ -202,7 +202,7 @@ describe("dorm CLI", () => {
         .all() as Array<{ name: string }>
     ).map((r) => r.name);
     db.close();
-    assert.deepEqual(names, ["authors", "book", "dorm_migrations"]);
+    assert.deepEqual(names, ["authors", "book", "qorm_migrations"]);
   });
 
   test("makemigrations --check exits 1 when changes pending", () => {

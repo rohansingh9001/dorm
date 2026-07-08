@@ -16,7 +16,7 @@ import { type Operation, type OpContext } from "./operations.ts";
 import { buildStates, resolveSquashes, type LoadedMigration } from "./loader.ts";
 import { MigrationRecorder } from "./recorder.ts";
 import { atomicOn } from "../transaction.ts";
-import { DormError } from "../errors.ts";
+import { QormError } from "../errors.ts";
 
 export interface MigrationPlanStep {
   migration: LoadedMigration;
@@ -39,9 +39,9 @@ export interface MigrateResult {
 function resolveTarget(migrations: LoadedMigration[], target: string): number {
   if (target === "zero") return -1;
   const matches = migrations.filter((m) => m.name === target || m.name.startsWith(target));
-  if (matches.length === 0) throw new DormError(`No migration matches "${target}".`);
+  if (matches.length === 0) throw new QormError(`No migration matches "${target}".`);
   if (matches.length > 1) {
-    throw new DormError(`"${target}" is ambiguous: ${matches.map((m) => m.name).join(", ")}.`);
+    throw new QormError(`"${target}" is ambiguous: ${matches.map((m) => m.name).join(", ")}.`);
   }
   return migrations.indexOf(matches[0]!);
 }
@@ -89,7 +89,7 @@ export class MigrationExecutor {
     for (const name of recorded) {
       // Superseded-by-squash names may remain recorded; everything else needs a file.
       if (!this.migrations.some((m) => m.name === name) && !replaced.has(name)) {
-        throw new DormError(`Applied migration "${name}" has no file on disk.`);
+        throw new QormError(`Applied migration "${name}" has no file on disk.`);
       }
     }
     return this.migrations.filter((m) => recorded.has(m.name)).map((m) => m.name);
@@ -199,7 +199,7 @@ export class MigrationExecutor {
   async collectSql(name: string): Promise<string[]> {
     await this.resolve();
     const i = resolveTarget(this.migrations, name);
-    if (i < 0) throw new DormError("Cannot collect SQL for 'zero'.");
+    if (i < 0) throw new QormError("Cannot collect SQL for 'zero'.");
     const mig = this.migrations[i]!;
     const before = stateBefore(this.statesAfter, i);
 

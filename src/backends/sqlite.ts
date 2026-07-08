@@ -188,7 +188,7 @@ class SqliteSchemaEditor implements SchemaEditor {
   ): Promise<void> {
     const q = (s: string) => this.backend.quoteName(s);
     const table = newMeta.dbTable;
-    const tmp = `${table}__dorm_new`;
+    const tmp = `${table}__qorm_new`;
     const exclude = new Set(opts.excludeColumns ?? []);
 
     const keptFields = newMeta.fieldList.filter((f) => f.concrete && !exclude.has(f.column));

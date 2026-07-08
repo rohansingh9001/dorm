@@ -690,7 +690,7 @@ function buildModel(
     try {
       resolveRelations();
     } catch {
-      /* surfaced by the synchronous pass or `dorm check` */
+      /* surfaced by the synchronous pass or `qorm check` */
     }
   });
 }

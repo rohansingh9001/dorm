@@ -1,11 +1,11 @@
 /**
- * Migration recorder: the `dorm_migrations` bookkeeping table (design 10.3 —
+ * Migration recorder: the `qorm_migrations` bookkeeping table (design 10.3 —
  * Django's `django_migrations`). Records `(app, name, applied)` per applied
  * migration; the single implicit app is "main".
  */
 import type { Backend } from "../backends/base.ts";
 
-export const MIGRATIONS_TABLE = "dorm_migrations";
+export const MIGRATIONS_TABLE = "qorm_migrations";
 export const DEFAULT_APP = "main";
 
 export class MigrationRecorder {
